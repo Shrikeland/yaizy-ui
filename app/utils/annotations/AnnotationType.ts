@@ -1,10 +1,10 @@
 export enum AnnotationType {
-    Precondition = 'Pre Condition',
-    PostCondition = 'Post Condition',
-    Description = 'Description',
-    GoTo = 'Go To',
-    Step = 'Step',
-    Assert = 'Assert',
-    Mock = 'Mock',
-    Data = 'Data'
+  Precondition = "Precondition",
+  PostCondition = "Postcondition",
+  Description = "Description",
+  GoTo = "Go to",
+  Step = "Step",
+  Assert = "Assert",
+  Mock = "Mock",
+  Data = "Data",
 }

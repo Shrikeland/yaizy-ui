@@ -1,27 +1,30 @@
 // @ts-check
 import { defineConfig, devices } from "@playwright/test";
-import dotenv from "dotenv";
-import path from "path";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config({ path: path.resolve(__dirname, '.env') });
-dotenv.config({ path: path.resolve(__dirname, ".env") });
+
+/* dotenv.config({ path: path.resolve(__dirname, ".env") });
 const ENV = process.env.ENV || "test-1";
 const baseUrls: { [key: string]: string } = {
   "test-1": process.env.TEST_1_BASE_URL!,
   "test-2": process.env.TEST_2_BASE_URL!,
   "test-3": process.env.TEST_3_BASE_URL!,
   "pre-prod": process.env.PRE_PROD_BASE_URL!,
-};
+}; */
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: "./tests",
+  testDir: "tests",
+  globalSetup: "./app/globalSetup.ts",
+  timeout: 50 * 1000,
+  expect: {
+    timeout: 10_000,
+  },
   /* Run tests in files in parallel */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -35,22 +38,22 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    baseURL: baseUrls[ENV],
-    trace: "on-first-retry",
+    actionTimeout: 30_000,
+    baseURL: process.env.BASE_URL,
+    trace: "retain-on-failure",
     screenshot: "only-on-failure",
+    video: "retain-on-failure",
     headless: process.env.CI ? true : false,
   },
 
   /* Configure projects for major browsers */
   projects: [
-    // { name: "setup", testMatch: /.*\.setup.ts/ },
     {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-        // storageState: "playwright/.auth/user.json",
+        viewport: { width: 1920, height: 1080 },
       },
-      // dependencies: ["setup"],
     },
     /*
     {
